@@ -6,7 +6,19 @@ class App extends React.Component {
     number: "",
     heldNum: "",
     oper: "",
-    sum: ""
+    buttonText: ["7", "8", "9", "C", "4", "5", "6", "/", "1", "2", "3", "*", "0", "-", "+", "="]
+  }
+
+  clickFunc = (buttonText) => {
+    if (buttonText === "/" || buttonText === "*" || buttonText === "-" || buttonText === "+") {
+      this.holdFunc(buttonText);
+    } else if (buttonText === "C") {
+      this.clearFunc();
+    } else if (buttonText === "=") {
+      this.mathFunc();
+    } else {
+      this.numFunc(buttonText);
+    }
   }
 
   numFunc = (num) => {
@@ -19,7 +31,7 @@ class App extends React.Component {
 
   mathFunc = () => {
     if (this.state.oper === "+") {
-      this.setState({ number: (parseInt(this.state.heldNum) + parseInt(this.state.number)) })
+      this.setState({ number: parseInt(this.state.heldNum) + parseInt(this.state.number) })
     } else if (this.state.oper === "-") {
       this.setState({ number: parseInt(this.state.heldNum) - parseInt(this.state.number) })
     } else if (this.state.oper === "*") {
@@ -30,7 +42,7 @@ class App extends React.Component {
   }
 
   clearFunc = () => {
-    this.setState({ number: "", heldNum: "", oper: "", sum: "" })
+    this.setState({ number: "", heldNum: "", oper: "" })
   }
  
   render() {
@@ -38,54 +50,11 @@ class App extends React.Component {
       <div className="App">
         <h1 className="total">{this.state.number}</h1>
         <div className="buttons">
-          <CalcButton func={() =>{this.numFunc("7")}} 
-          text="7"
-          />
-          <CalcButton func={() =>{this.numFunc("8")}} 
-          text="8"
-          />
-          <CalcButton func={() =>{this.numFunc("9")}} 
-          text="9"
-          />
-          <CalcButton func={this.clearFunc} 
-          text="C"
-          />
-          <CalcButton func={() =>{this.numFunc("4")}} 
-          text="4"
-          />
-          <CalcButton func={() =>{this.numFunc("5")}} 
-          text="5"
-          />
-          <CalcButton func={() =>{this.numFunc("6")}} 
-          text="6"
-          />
-          <CalcButton func={() =>{this.holdFunc("/")}} 
-          text="/"
-          />
-          <CalcButton func={() =>{this.numFunc("1")}} 
-          text="1"
-          />
-          <CalcButton func={() =>{this.numFunc("2")}} 
-          text="2"
-          />
-          <CalcButton func={() =>{this.numFunc("3")}} 
-          text="3"
-          />
-          <CalcButton func={() =>{this.holdFunc("*")}} 
-          text="*"
-          />
-          <CalcButton func={() =>{this.numFunc("0")}} 
-          text="0"
-          />
-          <CalcButton func={() =>{this.holdFunc("-")}} 
-          text="-"
-          />
-          <CalcButton func={() =>{this.holdFunc("+")}} 
-          text="+"
-          />
-          <CalcButton func={this.mathFunc} 
-          text="="
-          />
+          {this.state.buttonText.map((textIndex) => {
+            return(
+              <CalcButton key={textIndex} func={() => {this.clickFunc(textIndex)}} text={textIndex}/>
+            )
+          })} 
         </div>
       </div>
     );
@@ -93,9 +62,9 @@ class App extends React.Component {
 }
 
 const CalcButton = (props) => {
-  return(
-    <button className = "indButt" onClick={props.func}>{props.text}</button>
-  )
+    return(
+      <button className="indButt" onClick={props.func}>{props.text}</button>
+    )
 }
 
 export default App;
